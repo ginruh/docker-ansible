@@ -18,7 +18,7 @@ For example, I need to check if a piece of program works in ansible I have to do
 
 ### Ansible
 
-  [![dockeri.co](https://dockeri.co/image/iyorozuya/ansible)](https://registry.hub.docker.com/iyorozuya/ansible/)
+  [![dockeri.co](https://dockeri.co/image/iyorozuya/ansible)](https://hub.docker.com/r/iyorozuya/ansible)
 
   * Via shell
      ```sh
