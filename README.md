@@ -6,13 +6,13 @@
   </a>
 </p>
 
-A base for learning, playing and testing code
+A base for learning, experimenting and testing code.
 
 ## Motivation
-There are certain times when I am want to test, experiment or learn something without any setup. 
-Setting up environment takes ample time and also it becomes counter productive when doing it again and again.
+There are certain times when I want to test, experiment or learn something without doing any setup. 
+Setting up environment takes ample time and it becomes counter productive when doing it again and again.
 
-For example, I sometimes need to check if a piece of program for example in ansible works but I have to do certain setup. This repo acts a simple fast and way to get runtimes and environments via docker images.
+For example, I need to check if a piece of program works in ansible I have to do certain setup. This repo acts a simple fast and way to get runtimes and environments via docker images.
 
 ## Usage
 
@@ -23,8 +23,8 @@ For example, I sometimes need to check if a piece of program for example in ansi
   * Via shell
      ```sh
       # Tag refers to ansible version
-      # Please refer to Dockerhub or ansible dir of this repo to see supported versions
-      docker run -v ~/code:/app iyorozuya/ansible:2.11 ansible-playground # ansible 2.11
+      # Please refer to DockerHub or ansible dir of this repo to see supported versions
+      docker run -itd -v ~/code:/app --name ansible-playground iyorozuya/ansible:2.11 # ansible v2.11
      ```
   * Via docker-compose
       ```yaml
@@ -32,7 +32,7 @@ For example, I sometimes need to check if a piece of program for example in ansi
           image: iyorozuya/ansible:2.11
           user: rocky
           volumes:
-            - "~/code:/app"
+          - "~/code:/app"
       ```
       
 ## Todo

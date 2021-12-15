@@ -13,4 +13,4 @@ RUN pip3 install --user ansible==2.9
 
 WORKDIR /app
 
-CMD ["/usr/lib/systemd/systemd"]
+CMD ["tail", "-f", "/dev/null"]
