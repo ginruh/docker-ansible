@@ -2,7 +2,7 @@ FROM iyorozuya/ansible:base
 LABEL maintainer="iyorozuya"
 
 # Args
-ARG USERNAME=rocky
+ARG USERNAME=alma
 ARG ANSIBLE_CORE_VERSION
 
 # Install ansible-core

@@ -7,7 +7,7 @@ ARG ANSIBLE_VERSION
 
 # Install ansible
 USER $USERNAME
-RUN pip3 install --user ansible==$ANSIBLE_VERSION
+RUN pip3 install --user ansible==${ANSIBLE_VERSION}
 
 WORKDIR /app
 
