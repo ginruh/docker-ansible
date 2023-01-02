@@ -1,4 +1,5 @@
-FROM iyorozuya/ansible:base
+ARG ANSIBLE_BASE_IMAGE=iyorozuya/ansible:base-python39
+FROM $ANSIBLE_BASE_IMAGE
 LABEL maintainer="iyorozuya"
 
 # Args
@@ -7,7 +8,7 @@ ARG ANSIBLE_VERSION
 
 # Install ansible
 USER $USERNAME
-RUN pip3 install --user ansible==${ANSIBLE_VERSION}
+RUN pip3 install --user ansible==${ANSIBLE_VERSION}.*
 
 WORKDIR /app
 

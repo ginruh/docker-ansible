@@ -4,41 +4,52 @@
 
 # Special thanks to almalinux build script :)
 
+PYTHON_PACKAGES=( "python38" "python39" )
+PYTHON_PIP_PACKAGES=( "python38-pip" "python39-pip" )
+ANSIBLE_BASE_TAGS=( "iyorozuya/ansible:base-python38" "iyorozuya/ansible:base-python39" )
+ANSIBLE_CORE_VERSIONS=( "2.12" "2.13" "2.14" )
+ANSIBLE_VERSIONS=( "7.0" "7.1" )
+
 # print help details
 show_usage() {
     echo -e 'Generates ansible and ansible-core docker images\n'
     echo -e 'Usage build.sh [OPTION]\n'
     echo '  -h        show this message and exit' 
     echo '  -m        pip module name for ansible'
-    echo '  -v        module version of specified module'
 }
 
 # build ansible docker image
 build_ansible() {
-    tag_name="iyorozuya/ansible:ansible_$1"
-    echo "Generating $tag_name ....."
-    docker build \
-        -t "$tag_name" \
-        --build-arg ANSIBLE_VERSION="$MODULE_VERSION" \
-        -f dockerfiles/Dockerfile.ansible .
-    docker push "$tag_name"
+    for i in "${!ANSIBLE_VERSIONS[@]}"; do
+        version=${ANSIBLE_VERSIONS[i]}
+        tag_name="iyorozuya/ansible:ansible_${version}"
+        echo "Generating $tag_name ....."
+        docker build \
+            -t "$tag_name" \
+            --build-arg ANSIBLE_BASE_IMAGE="iyorozuya/ansible:base-python39" \
+            --build-arg ANSIBLE_VERSION="${version}" \
+            -f dockerfiles/Dockerfile.ansible .
+        docker push "$tag_name"
+    done
 }
 
 # build ansible-core docker image
 build_ansible_core() {
-    tag_name="iyorozuya/ansible:ansible-core_$1"
-    echo "Generating $tag_name ....."
-    docker build \
-        -t "$tag_name" \
-        --build-arg ANSIBLE_CORE_VERSION="$MODULE_VERSION" \
-        -f dockerfiles/Dockerfile.ansible_core .
-    docker push "$tag_name"
+    for i in "${!ANSIBLE_CORE_VERSIONS[@]}"; do
+        version=${ANSIBLE_CORE_VERSIONS[i]}
+        tag_name="iyorozuya/ansible:ansible-core_${version}"
+        echo "Generating $tag_name ....."
+        docker build \
+            -t "$tag_name" \
+            --build-arg ANSIBLE_BASE_IMAGE="iyorozuya/ansible:base-python39" \
+            --build-arg ANSIBLE_CORE_VERSION="${version}" \
+            -f dockerfiles/Dockerfile.ansible_core .
+        docker push "$tag_name"
+    done
 }
 
 # build ansible base docker image
 build_ansible_base() {
-    PYTHON_PACKAGES=( "python38" "python39" )
-    PYTHON_PIP_PACKAGES=( "python38-pip" "python39-pip" )
     for i in "${!PYTHON_PACKAGES[@]}"; do 
         python_pkg=${PYTHON_PACKAGES[i]}
         pip_pkg=${PYTHON_PIP_PACKAGES[i]}
@@ -54,7 +65,7 @@ build_ansible_base() {
 }
 
 # parse and save required params in var
-while getopts "hm:v:" opt; do
+while getopts "hm:" opt; do
     case "${opt}" in
         h)
             show_usage
@@ -63,38 +74,25 @@ while getopts "hm:v:" opt; do
         m)
             MODULE_NAME="${OPTARG}"
             ;;
-        v)
-            MODULE_VERSION="${OPTARG}"
-            ;;
         *)
             exit 1
             ;;
     esac
 done
 
-# -m and -v both are required when -m == ansible or -m == ansible-core
-#  if -m == base then version is not required
-if [ -z "$MODULE_NAME" ] || [ -z "$MODULE_VERSION" ]; then
-    if [ -z "$MODULE_VERSION" ]; then
-        if [ -z "$MODULE_NAME" ] || [[ $MODULE_NAME != "base" ]]; then
-            echo "Missing -m or -v args"                   
-            show_usage
-            exit 1
-        fi
-    fi
+if [ -z "$MODULE_NAME" ]; then
+    echo "Missing -m arg"
+    show_usage
+    exit 1
 fi
 
 echo "Module name: $MODULE_NAME"
-if ! [ -z "$MODULE_VERSION" ]; then
-    echo "Module version: $MODULE_VERSION"
-fi
-echo ""
 
 # handle only ansible and ansible-core module names
 if [[ $MODULE_NAME == "ansible" ]]; then
-    build_ansible "$MODULE_VERSION"
+    build_ansible
 elif [[ $MODULE_NAME == "ansible-core" ]]; then
-    build_ansible_core "$MODULE_VERSION"
+    build_ansible_core
 elif [[ $MODULE_NAME == "base" ]]; then
     build_ansible_base
 else
