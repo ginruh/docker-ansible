@@ -1,0 +1,14 @@
+FROM iyorozuya/ansible:base
+LABEL maintainer="iyorozuya"
+
+# Args
+ARG USERNAME=rocky
+ARG ANSIBLE_CORE_VERSION
+
+# Install ansible-core
+USER $USERNAME
+RUN pip3 install --user ansible-core==$ANSIBLE_CORE_VERSION
+
+WORKDIR /app
+
+CMD ["tail", "-f", "/dev/null"]

@@ -1,11 +1,9 @@
-FROM rockylinux/rockylinux:8.5
+# This is a base image not to be used directly
+FROM almalinux:8
 LABEL maintainer="iyorozuya"
-LABEL com.centurylinklabs.watchtower.enable="false"
-
-ENV container=docker
 
 # Args
-ARG USERNAME=rocky
+ARG USERNAME=alma
 ARG UID=1000
 ARG GID=1000
 
