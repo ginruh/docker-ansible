@@ -37,12 +37,20 @@ build_ansible_core() {
 
 # build ansible base docker image
 build_ansible_base() {
-    tag_name="iyorozuya/ansible:base"
-    echo "Generating $tag_name ....."
-    docker build \
-        -t "$tag_name" \
-        -f dockerfiles/Dockerfile.base .
-    docker push "$tag_name"
+    PYTHON_PACKAGES=( "python38" "python39" )
+    PYTHON_PIP_PACKAGES=( "python38-pip" "python39-pip" )
+    for i in "${!PYTHON_PACKAGES[@]}"; do 
+        python_pkg=${PYTHON_PACKAGES[i]}
+        pip_pkg=${PYTHON_PIP_PACKAGES[i]}
+        tag_name="iyorozuya/ansible:base-${python_pkg}"
+        echo "Generating $tag_name ....."
+        docker build \
+            -t "$tag_name" \
+            --build-arg PYTHON_PACKAGE="$python_pkg" \
+            --build-arg PYTHON_PIP_PACKAGE="$pip_pkg" \
+            -f dockerfiles/Dockerfile.base .
+        docker push "$tag_name"
+    done
 }
 
 # parse and save required params in var

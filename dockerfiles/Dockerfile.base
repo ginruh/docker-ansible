@@ -6,17 +6,16 @@ LABEL maintainer="iyorozuya"
 ARG USERNAME=alma
 ARG UID=1000
 ARG GID=1000
-
-# Update and upgrade
-RUN dnf update -y
-RUN dnf upgrade -y
+ARG PYTHON_PACKAGE
+ARG PYTHON_PIP_PACKAGE
 
 # Install required packages
 RUN dnf install \
     epel-release \
-    python3-pip \
     sudo -y
-RUN pip3 install --upgrade pip
+    
+# Install python
+RUN dnf install ${PYTHON_PACKAGE} ${PYTHON_PIP_PACKAGE} -y
 
 # Create user
 RUN groupadd -g $GID $USERNAME
