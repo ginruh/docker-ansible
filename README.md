@@ -1,6 +1,9 @@
 # docker-ansible
 
-This repository contains Dockerfiles of ansible that published to the public DockerHub Registry.
+## Why?
+- For testing and developing with ansible
+- For running ansible playbooks for building docker images.
+  I use ansible with vagrant for provisioning vm. So, why not using same ansible codebase to build docker images.
 
 ## Information
 These images are based on ``almalinux`` docker image.
