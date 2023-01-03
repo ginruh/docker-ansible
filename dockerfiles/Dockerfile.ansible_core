@@ -6,6 +6,10 @@ LABEL maintainer="iyorozuya"
 ARG USERNAME=alma
 ARG ANSIBLE_CORE_VERSION
 
+# Install sshd
+RUN dnf install openssh-server openssh-clients -y
+RUN systemctl enable sshd
+
 # Install ansible-core
 USER $USERNAME
 RUN pip3 install --user ansible-core==${ANSIBLE_CORE_VERSION}.*
