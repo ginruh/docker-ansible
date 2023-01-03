@@ -12,4 +12,4 @@ RUN pip3 install --user ansible==${ANSIBLE_VERSION}.*
 
 WORKDIR /app
 
-CMD ["tail", "-f", "/dev/null"]
+CMD ["ansible"]
