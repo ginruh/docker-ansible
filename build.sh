@@ -5,6 +5,7 @@
 # Special thanks to almalinux build script :)
 
 PYTHON_PACKAGES=( "python38" "python39" )
+PYTHON_DEVEL_PACKAGES=( "python38-devel" "python39-devel" )
 PYTHON_PIP_PACKAGES=( "python38-pip" "python39-pip" )
 ANSIBLE_BASE_TAGS=( "iyorozuya/ansible:base-python38" "iyorozuya/ansible:base-python39" )
 ANSIBLE_CORE_VERSIONS=( "2.12" "2.13" "2.14" )
@@ -52,12 +53,14 @@ build_ansible_core() {
 build_ansible_base() {
     for i in "${!PYTHON_PACKAGES[@]}"; do 
         python_pkg=${PYTHON_PACKAGES[i]}
+        python_devel_pkg=${PYTHON_DEVEL_PACKAGES[i]}
         pip_pkg=${PYTHON_PIP_PACKAGES[i]}
         tag_name="iyorozuya/ansible:base-${python_pkg}"
         echo "Generating $tag_name ....."
         docker build \
             -t "$tag_name" \
             --build-arg PYTHON_PACKAGE="$python_pkg" \
+            --build-arg PYTHON_DEVEL_PACKAGE="$python_devel_pkg" \
             --build-arg PYTHON_PIP_PACKAGE="$pip_pkg" \
             -f dockerfiles/Dockerfile.base .
         docker push "$tag_name"

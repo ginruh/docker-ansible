@@ -7,6 +7,7 @@ ARG USERNAME=alma
 ARG UID=1000
 ARG GID=1000
 ARG PYTHON_PACKAGE
+ARG PYTHON_DEVEL_PACKAGE
 ARG PYTHON_PIP_PACKAGE
 
 # Install required packages
@@ -15,7 +16,7 @@ RUN dnf install \
     sudo -y
     
 # Install python
-RUN dnf install ${PYTHON_PACKAGE} ${PYTHON_PIP_PACKAGE} -y
+RUN dnf install ${PYTHON_PACKAGE} ${PYTHON_DEVEL_PACKAGE} ${PYTHON_PIP_PACKAGE} -y
 
 # Create user
 RUN groupadd -g $GID $USERNAME
